@@ -1,0 +1,35 @@
+@@ .. @@
+ @tailwind base;
+ @tailwind components;
+ @tailwind utilities;
++
++/* RTL Support */
++.rtl {
++  direction: rtl;
++}
++
++/* RTL-specific adjustments */
++.rtl .space-x-reverse > :not([hidden]) ~ :not([hidden]) {
++  --tw-space-x-reverse: 1;
++}
++
++.rtl .divide-x-reverse > :not([hidden]) ~ :not([hidden]) {
++  --tw-divide-x-reverse: 1;
++}
++
++/* Language-specific font adjustments */
++[lang="ar"] {
++  font-family: 'Noto Sans Arabic', 'Arial', sans-serif;
++}
++
++[lang="zh"] {
++  font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
++}
++
++[lang="ja"] {
++  font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
++}
++
++[lang="uk"] {
++  font-family: 'Inter', 'Roboto', 'Arial', sans-serif;
++}

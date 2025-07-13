@@ -1,0 +1,125 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        - DATABASE_URL=${DATABASE_URL}
+        - OPENAI_API_KEY=${OPENAI_API_KEY}
+        - OPENAI_ASSISTANT_UNIVERSAL=${OPENAI_ASSISTANT_UNIVERSAL}
+        - OPENAI_ASSISTANT_PLATFORM_DETECTION=${OPENAI_ASSISTANT_PLATFORM_DETECTION}
+        - OPENAI_ASSISTANT_SUPPORT=${OPENAI_ASSISTANT_SUPPORT}
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_ASSISTANT_UNIVERSAL=${OPENAI_ASSISTANT_UNIVERSAL}
+      - OPENAI_ASSISTANT_PLATFORM_DETECTION=${OPENAI_ASSISTANT_PLATFORM_DETECTION}
+      - OPENAI_ASSISTANT_SUPPORT=${OPENAI_ASSISTANT_SUPPORT}
+      - REDIS_URL=${REDIS_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - CSRF_SECRET=${CSRF_SECRET}
+      - NEXT_PUBLIC_WAYFORPAY_MERCHANT_ACCOUNT=${NEXT_PUBLIC_WAYFORPAY_MERCHANT_ACCOUNT}
+      - WAYFORPAY_SECRET_KEY=${WAYFORPAY_SECRET_KEY}
+      - NEXT_PUBLIC_WAYFORPAY_DOMAIN=${NEXT_PUBLIC_WAYFORPAY_DOMAIN}
+      - ERROR_TRACKING_URL=${ERROR_TRACKING_URL}
+      - ERROR_TRACKING_API_KEY=${ERROR_TRACKING_API_KEY}
+      - NEXT_PUBLIC_ANALYTICS_ID=${NEXT_PUBLIC_ANALYTICS_ID}
+      - PERFORMANCE_MONITORING_URL=${PERFORMANCE_MONITORING_URL}
+      - NEXT_PUBLIC_CDN_URL=${NEXT_PUBLIC_CDN_URL}
+      - CRON_SECRET=${CRON_SECRET}
+      - MONITORING_WEBHOOK_URL=${MONITORING_WEBHOOK_URL}
+      - ADMIN_WEBHOOK_URL=${ADMIN_WEBHOOK_URL}
+      - BACKUP_DIR=${BACKUP_DIR}
+      - BACKUP_STORAGE_URL=${BACKUP_STORAGE_URL}
+    depends_on:
+      - db
+      - redis
+    networks:
+      - copyflow-network
+    volumes:
+      - app-data:/app/data
+      - backups:/app/backups
+
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - copyflow-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - copyflow-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  nginx:
+    image: nginx:alpine
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./nginx/www:/var/www/html
+    depends_on:
+      - app
+    networks:
+      - copyflow-network
+
+  cron:
+    build:
+      context: .
+      dockerfile: Dockerfile.cron
+    restart: always
+    environment:
+      - CRON_SECRET=${CRON_SECRET}
+      - DATABASE_URL=${DATABASE_URL}
+      - BACKUP_DIR=${BACKUP_DIR}
+      - BACKUP_STORAGE_URL=${BACKUP_STORAGE_URL}
+      - MONITORING_WEBHOOK_URL=${MONITORING_WEBHOOK_URL}
+      - ADMIN_WEBHOOK_URL=${ADMIN_WEBHOOK_URL}
+    volumes:
+      - backups:/app/backups
+    networks:
+      - copyflow-network
+    depends_on:
+      - app
+      - db
+
+volumes:
+  postgres-data:
+  redis-data:
+  app-data:
+  backups:
+
+networks:
+  copyflow-network:
+    driver: bridge

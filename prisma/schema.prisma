@@ -1,0 +1,230 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String   @id @default(cuid())
+  email             String   @unique
+  name              String?
+  avatar_url        String?
+  
+  // Subscription details
+  subscription_plan String   @default("free") // 'free', 'pro', 'business'
+  plan_started_at   DateTime?
+  plan_expires_at   DateTime?
+  
+  // Usage tracking
+  generations_used  Int      @default(0)
+  generations_limit Int      @default(5)
+  reset_date        DateTime @default(now())
+  
+  // Preferences
+  default_language       String  @default("en")
+  default_writing_style  String  @default("professional")
+  emoji_preference       Boolean @default(true)
+  
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+  
+  // Relations
+  generations       Generation[]
+  bulk_processing   BulkProcessing[]
+  usage_logs        UsageLog[]
+  support_sessions  SupportChatSession[]
+  
+  @@map("users")
+}
+
+model Generation {
+  id                String   @id @default(cuid())
+  user_id           String
+  
+  // Input details
+  input_method      String   // 'text', 'csv', 'url'
+  input_data        Json     // original input
+  
+  // Generation settings
+  category          String
+  writing_style     String
+  platforms         String[] // ['universal', 'amazon', 'shopify']
+  language          String   @default("en")
+  emoji_settings    Json?
+  
+  // AI processing
+  assistant_used    String?  // which OpenAI assistant
+  processing_time_ms Int?
+  tokens_consumed   Int?
+  
+  // Output content (structured with CopyFlow_ prefixes)
+  generated_content Json
+  platform_optimizations Json?
+  viral_content     Json?
+  competitive_analysis Json?
+  
+  // Quality metrics
+  user_rating       Int?     // 1-5 stars
+  user_feedback     String?
+  
+  // Usage calculation
+  usage_cost        Float    // 1.0 for base, +0.5 per additional platform
+  
+  created_at        DateTime @default(now())
+  
+  // Relations
+  user              User     @relation(fields: [user_id], references: [id])
+  usage_logs        UsageLog[]
+  
+  @@map("generations")
+}
+
+model BulkProcessing {
+  id                String   @id @default(cuid())
+  user_id           String
+  
+  // File details
+  original_filename String
+  file_size         Int?
+  total_products    Int
+  processed_products Int     @default(0)
+  failed_products   Int     @default(0)
+  
+  // Platform detection
+  detected_platform String?
+  detection_confidence Float?
+  column_mapping    Json?
+  
+  // Processing status
+  status            String   @default("queued") // 'queued', 'processing', 'completed', 'failed'
+  error_message     String?
+  
+  // Settings used
+  global_writing_style String
+  global_emoji_settings Json?
+  selected_platforms String[]
+  
+  // Results
+  output_file_url   String?
+  processing_summary Json?
+  
+  created_at        DateTime @default(now())
+  completed_at      DateTime?
+  
+  // Relations
+  user              User     @relation(fields: [user_id], references: [id])
+  
+  @@map("bulk_processing")
+}
+
+model UsageLog {
+  id              String   @id @default(cuid())
+  user_id         String
+  generation_id   String?
+  
+  action          String   // 'text_generation', 'csv_bulk', 'url_analysis'
+  usage_amount    Float    // 1.0 for base, 0.5 for additional platforms
+  platforms_used  String[]
+  
+  created_at      DateTime @default(now())
+  
+  // Relations
+  user            User       @relation(fields: [user_id], references: [id])
+  generation      Generation? @relation(fields: [generation_id], references: [id])
+  
+  @@map("usage_logs")
+}
+
+model SupportChatSession {
+  id                String   @id @default(cuid())
+  user_id           String
+  
+  // Session details
+  session_status    String   @default("active") // 'active', 'resolved', 'escalated'
+  started_at        DateTime @default(now())
+  ended_at          DateTime?
+  
+  // Context information
+  user_page         String?  // which page user was on when chat started
+  user_plan         String?  // user's current subscription plan
+  user_usage_context Json?   // current usage stats when chat started
+  
+  // Resolution details
+  satisfaction_rating Int?   // 1-5 stars after chat
+  resolution_time_minutes Int?
+  escalated_to_human Boolean @default(false)
+  
+  created_at        DateTime @default(now())
+  
+  // Relations
+  user              User     @relation(fields: [user_id], references: [id])
+  messages          SupportChatMessage[]
+  
+  @@map("support_chat_sessions")
+}
+
+model SupportChatMessage {
+  id              String   @id @default(cuid())
+  session_id      String
+  
+  // Message details
+  sender_type     String   // 'user', 'ai_assistant', 'human_support'
+  message_content String
+  message_type    String   @default("text") // 'text', 'image', 'file', 'quick_reply'
+  
+  // AI Assistant context (if applicable)
+  assistant_used  String?
+  response_time_ms Int?
+  confidence_score Float?
+  
+  // Human support context (if applicable)
+  support_agent_id String?
+  
+  created_at      DateTime @default(now())
+  
+  // Relations
+  session         SupportChatSession @relation(fields: [session_id], references: [id])
+  
+  @@map("support_chat_messages")
+}
+
+model URLAnalysisCache {
+  id                String   @id @default(cuid())
+  url               String   @unique
+  
+  // Platform detection
+  detected_platform String?
+  extraction_success Boolean
+  
+  // Extracted data
+  extracted_data    Json?
+  competitor_insights Json?
+  
+  // Cache metadata
+  cached_at         DateTime @default(now())
+  expires_at        DateTime
+  hit_count         Int      @default(0)
+  
+  @@map("url_analysis_cache")
+}
+
+model PlatformDetectionFeedback {
+  id                    String   @id @default(cuid())
+  user_id               String?
+  
+  // Detection details
+  csv_header_pattern    String[]
+  detected_platform     String?
+  user_corrected_platform String?
+  confidence_score      Float?
+  
+  // Learning data
+  correct_detection     Boolean
+  
+  created_at            DateTime @default(now())
+  
+  @@map("platform_detection_feedback")
+}

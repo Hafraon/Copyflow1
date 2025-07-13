@@ -1,0 +1,153 @@
+{
+  "magicInput": {
+    "title": "Magic Input System",
+    "textInput": "Text Input",
+    "csvBulk": "CSV Bulk",
+    "urlIntelligence": "URL Intelligence",
+    "singleProduct": "Single Product Enhancement",
+    "bulkProcessing": "Export → Super-Export Workflow",
+    "competitorAnalysis": "Competitor Spy & Enhancement",
+    "generateContent": "Generate Content",
+    "continueToNext": "Continue to Platform Selection",
+    "processProducts": "Process {{count}} Products"
+  },
+  
+  "platforms": {
+    "universal": "Universal",
+    "amazon": "Amazon",
+    "shopify": "Shopify",
+    "instagram": "Instagram",
+    "tiktok": "TikTok",
+    "facebook": "Facebook",
+    "ebay": "eBay",
+    "etsy": "Etsy",
+    "platformSelection": "Platform Selection",
+    "selectPlatforms": "Select Platforms",
+    "platformDetected": "Platform Detected",
+    "detectionConfidence": "Detection Confidence"
+  },
+  
+  "plans": {
+    "freePlan": "Free Plan",
+    "proPlan": "Pro Plan",
+    "businessPlan": "Business Plan",
+    "currentPlan": "Current Plan",
+    "upgradeRequired": "Upgrade Required",
+    "usageLimit": "Usage Limit",
+    "generationsUsed": "Generations Used",
+    "generationsRemaining": "Generations Remaining"
+  },
+  
+  "content": {
+    "productTitle": "Product Title",
+    "productDescription": "Product Description",
+    "seoTitle": "SEO Title",
+    "metaDescription": "Meta Description",
+    "callToAction": "Call to Action",
+    "bulletPoints": "Bullet Points",
+    "keyFeatures": "Key Features",
+    "tags": "Tags",
+    "viralContent": "Viral Content",
+    "tiktokHooks": "TikTok Hooks",
+    "instagramCaptions": "Instagram Captions"
+  },
+  
+  "actions": {
+    "upload": "Upload",
+    "download": "Download",
+    "export": "Export",
+    "import": "Import",
+    "generate": "Generate",
+    "analyze": "Analyze",
+    "process": "Process",
+    "save": "Save",
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "back": "Back",
+    "next": "Next",
+    "finish": "Finish",
+    "retry": "Retry",
+    "reset": "Reset"
+  },
+  
+  "validation": {
+    "required": "This field is required",
+    "requiredField": "Required field",
+    "invalidFormat": "Invalid format",
+    "fileTooLarge": "File too large",
+    "unsupportedFormat": "Unsupported format",
+    "minimumLength": "Minimum {{count}} characters required",
+    "maximumLength": "Maximum {{count}} characters allowed",
+    "invalidEmail": "Invalid email address",
+    "invalidUrl": "Invalid URL format"
+  },
+  
+  "status": {
+    "loading": "Loading...",
+    "processing": "Processing...",
+    "generating": "Generating...",
+    "analyzing": "Analyzing...",
+    "uploading": "Uploading...",
+    "downloading": "Downloading...",
+    "completed": "Completed",
+    "failed": "Failed",
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Information"
+  },
+  
+  "navigation": {
+    "dashboard": "Dashboard",
+    "magicInput": "Magic Input",
+    "results": "Results",
+    "usage": "Usage",
+    "settings": "Settings",
+    "support": "Support",
+    "pricing": "Pricing",
+    "documentation": "Documentation"
+  },
+  
+  "support": {
+    "chatSupport": "Chat Support",
+    "helpCenter": "Help Center",
+    "contactUs": "Contact Us",
+    "faq": "FAQ",
+    "documentation": "Documentation",
+    "reportBug": "Report Bug",
+    "featureRequest": "Feature Request",
+    "technicalIssue": "Technical Issue"
+  },
+  
+  "settings": {
+    "language": "Language",
+    "selectLanguage": "Select Language",
+    "preferences": "Preferences",
+    "account": "Account",
+    "billing": "Billing",
+    "notifications": "Notifications",
+    "privacy": "Privacy",
+    "security": "Security"
+  },
+  
+  "errors": {
+    "somethingWentWrong": "Something went wrong",
+    "tryAgain": "Please try again",
+    "contactSupport": "Contact support if the problem persists",
+    "networkError": "Network error",
+    "serverError": "Server error",
+    "notFound": "Not found",
+    "unauthorized": "Unauthorized",
+    "forbidden": "Access denied",
+    "rateLimitExceeded": "Rate limit exceeded"
+  },
+  
+  "time": {
+    "justNow": "Just now",
+    "minutesAgo": "{{count}} minutes ago",
+    "hoursAgo": "{{count}} hours ago",
+    "daysAgo": "{{count}} days ago",
+    "weeksAgo": "{{count}} weeks ago",
+    "monthsAgo": "{{count}} months ago"
+  }
+}

@@ -1,0 +1,57 @@
+# Ignore development files
+node_modules
+npm-debug.log
+.git
+.github
+.vscode
+.next
+.env
+.env.local
+.env.development
+.env.test
+
+# Ignore build artifacts
+dist
+build
+out
+.next
+
+# Ignore test files
+__tests__
+*.test.js
+*.spec.js
+coverage
+
+# Ignore documentation
+README.md
+CHANGELOG.md
+docs
+
+# Ignore Docker files
+Dockerfile
+Dockerfile.cron
+docker-compose.yml
+.dockerignore
+
+# Ignore editor configs
+.editorconfig
+.prettierrc
+.eslintrc
+
+# Ignore temporary files
+.DS_Store
+*.log
+*.swp
+*.swo
+tmp
+.tmp
+
+# Ignore backups
+backups
+*.bak
+*.backup
+
+# Keep scripts
+!scripts/validate-env.js
+!scripts/backup-db.js
+!scripts/cron-jobs.sh

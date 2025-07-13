@@ -1,0 +1,108 @@
+name: Deploy CopyFlow
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Validate environment
+        run: npm run validate-env
+        env:
+          # Add required environment variables from GitHub secrets
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_ASSISTANT_UNIVERSAL: ${{ secrets.OPENAI_ASSISTANT_UNIVERSAL }}
+          OPENAI_ASSISTANT_PLATFORM_DETECTION: ${{ secrets.OPENAI_ASSISTANT_PLATFORM_DETECTION }}
+          OPENAI_ASSISTANT_SUPPORT: ${{ secrets.OPENAI_ASSISTANT_SUPPORT }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          NODE_ENV: production
+      - name: Lint
+        run: npm run lint
+  
+  build:
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build:production
+        env:
+          # Add required environment variables from GitHub secrets
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_ASSISTANT_UNIVERSAL: ${{ secrets.OPENAI_ASSISTANT_UNIVERSAL }}
+          OPENAI_ASSISTANT_PLATFORM_DETECTION: ${{ secrets.OPENAI_ASSISTANT_PLATFORM_DETECTION }}
+          OPENAI_ASSISTANT_SUPPORT: ${{ secrets.OPENAI_ASSISTANT_SUPPORT }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          NODE_ENV: production
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: dist
+  
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build
+          path: dist
+      - name: Run E2E tests
+        run: npm run test:e2e
+      - name: Run performance tests
+        run: npm run test:performance
+  
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build
+          path: dist
+      - name: Deploy to production
+        uses: netlify/actions/cli@master
+        with:
+          args: deploy --prod --dir=dist
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      - name: Notify deployment
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{"text":"🚀 CopyFlow deployed to production successfully!"}' \
+          ${{ secrets.SLACK_WEBHOOK_URL }}

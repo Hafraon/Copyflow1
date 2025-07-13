@@ -1,0 +1,153 @@
+{
+  "magicInput": {
+    "title": "Система Magic Input",
+    "textInput": "Текстовий ввід",
+    "csvBulk": "CSV масова обробка",
+    "urlIntelligence": "URL аналітика",
+    "singleProduct": "Покращення одного товару",
+    "bulkProcessing": "Експорт → Супер-Експорт робочий процес",
+    "competitorAnalysis": "Шпигунство за конкурентами та покращення",
+    "generateContent": "Генерувати контент",
+    "continueToNext": "Продовжити до вибору платформ",
+    "processProducts": "Обробити {{count}} товарів"
+  },
+  
+  "platforms": {
+    "universal": "Універсальний",
+    "amazon": "Amazon",
+    "shopify": "Shopify",
+    "instagram": "Instagram",
+    "tiktok": "TikTok",
+    "facebook": "Facebook",
+    "ebay": "eBay",
+    "etsy": "Etsy",
+    "platformSelection": "Вибір платформ",
+    "selectPlatforms": "Оберіть платформи",
+    "platformDetected": "Платформу виявлено",
+    "detectionConfidence": "Впевненість виявлення"
+  },
+  
+  "plans": {
+    "freePlan": "Безкоштовний план",
+    "proPlan": "Pro план",
+    "businessPlan": "Бізнес план",
+    "currentPlan": "Поточний план",
+    "upgradeRequired": "Потрібне оновлення",
+    "usageLimit": "Ліміт використання",
+    "generationsUsed": "Генерацій використано",
+    "generationsRemaining": "Генерацій залишилось"
+  },
+  
+  "content": {
+    "productTitle": "Назва товару",
+    "productDescription": "Опис товару",
+    "seoTitle": "SEO заголовок",
+    "metaDescription": "Мета опис",
+    "callToAction": "Заклик до дії",
+    "bulletPoints": "Ключові пункти",
+    "keyFeatures": "Основні характеристики",
+    "tags": "Теги",
+    "viralContent": "Вірусний контент",
+    "tiktokHooks": "TikTok хуки",
+    "instagramCaptions": "Instagram підписи"
+  },
+  
+  "actions": {
+    "upload": "Завантажити",
+    "download": "Скачати",
+    "export": "Експорт",
+    "import": "Імпорт",
+    "generate": "Генерувати",
+    "analyze": "Аналізувати",
+    "process": "Обробити",
+    "save": "Зберегти",
+    "cancel": "Скасувати",
+    "continue": "Продовжити",
+    "back": "Назад",
+    "next": "Далі",
+    "finish": "Завершити",
+    "retry": "Повторити",
+    "reset": "Скинути"
+  },
+  
+  "validation": {
+    "required": "Це поле є обов'язковим",
+    "requiredField": "Обов'язкове поле",
+    "invalidFormat": "Неправильний формат",
+    "fileTooLarge": "Файл занадто великий",
+    "unsupportedFormat": "Непідтримуваний формат",
+    "minimumLength": "Мінімум {{count}} символів потрібно",
+    "maximumLength": "Максимум {{count}} символів дозволено",
+    "invalidEmail": "Неправильна адреса електронної пошти",
+    "invalidUrl": "Неправильний формат URL"
+  },
+  
+  "status": {
+    "loading": "Завантаження...",
+    "processing": "Обробка...",
+    "generating": "Генерація...",
+    "analyzing": "Аналіз...",
+    "uploading": "Завантаження...",
+    "downloading": "Скачування...",
+    "completed": "Завершено",
+    "failed": "Невдало",
+    "success": "Успіх",
+    "error": "Помилка",
+    "warning": "Попередження",
+    "info": "Інформація"
+  },
+  
+  "navigation": {
+    "dashboard": "Панель управління",
+    "magicInput": "Magic Input",
+    "results": "Результати",
+    "usage": "Використання",
+    "settings": "Налаштування",
+    "support": "Підтримка",
+    "pricing": "Ціни",
+    "documentation": "Документація"
+  },
+  
+  "support": {
+    "chatSupport": "Чат підтримка",
+    "helpCenter": "Центр допомоги",
+    "contactUs": "Зв'яжіться з нами",
+    "faq": "Часті питання",
+    "documentation": "Документація",
+    "reportBug": "Повідомити про помилку",
+    "featureRequest": "Запит функції",
+    "technicalIssue": "Технічна проблема"
+  },
+  
+  "settings": {
+    "language": "Мова",
+    "selectLanguage": "Оберіть мову",
+    "preferences": "Налаштування",
+    "account": "Акаунт",
+    "billing": "Білінг",
+    "notifications": "Сповіщення",
+    "privacy": "Приватність",
+    "security": "Безпека"
+  },
+  
+  "errors": {
+    "somethingWentWrong": "Щось пішло не так",
+    "tryAgain": "Будь ласка, спробуйте ще раз",
+    "contactSupport": "Зверніться до підтримки, якщо проблема не зникне",
+    "networkError": "Помилка мережі",
+    "serverError": "Помилка сервера",
+    "notFound": "Не знайдено",
+    "unauthorized": "Не авторизовано",
+    "forbidden": "Доступ заборонено",
+    "rateLimitExceeded": "Перевищено ліміт запитів"
+  },
+  
+  "time": {
+    "justNow": "Щойно",
+    "minutesAgo": "{{count}} хвилин тому",
+    "hoursAgo": "{{count}} годин тому",
+    "daysAgo": "{{count}} днів тому",
+    "weeksAgo": "{{count}} тижнів тому",
+    "monthsAgo": "{{count}} місяців тому"
+  }
+}
