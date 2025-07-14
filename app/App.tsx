@@ -2,7 +2,8 @@
 
 import { useEffect } from 'react'
 import { Toaster } from 'sonner'
-import { ErrorBoundary } from '@/lib/error-handling'
+import { ErrorBoundary } from '@/components/ui/error-boundary'
+import LanguageProvider from '@/components/providers/LanguageProvider'
 
 export default function App({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -18,9 +19,11 @@ export default function App({ children }: { children: React.ReactNode }) {
   }, [])
 
   return (
-    <ErrorBoundary>
-      {children}
-      <Toaster />
-    </ErrorBoundary>
+    <LanguageProvider>
+      <ErrorBoundary>
+        {children}
+        <Toaster />
+      </ErrorBoundary>
+    </LanguageProvider>
   )
 }

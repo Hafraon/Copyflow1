@@ -6,20 +6,8 @@ import LanguageDetector from 'i18next-browser-languagedetector'
 import enCommon from '@/locales/en/common.json'
 import ukCommon from '@/locales/uk/common.json'
 
-// Safe DOM manipulation only on client side
-const updateDocumentDirection = (language: string) => {
-  if (typeof window === 'undefined') return
-  
-  const isRTL = ['ar'].includes(language)
-  const direction = isRTL ? 'rtl' : 'ltr'
-  
-  document.documentElement.dir = direction
-  document.documentElement.lang = language
-  
-  // Update body classes safely
-  document.body.classList.remove('rtl', 'ltr')
-  document.body.classList.add(direction)
-}
+// RTL languages - exported for use in LanguageProvider
+export const RTL_LANGUAGES = ['ar']
 
 const resources = {
   en: {
@@ -75,15 +63,14 @@ if (typeof window !== 'undefined') {
       detection: {
         order: ['localStorage', 'navigator'],
         caches: ['localStorage'],
-      },
+      }
     })
-
-  // Update document direction when language changes
-  i18n.on('languageChanged', updateDocumentDirection)
-  
-  // Set initial direction
-  updateDocumentDirection(i18n.language)
 }
 
 export default i18n
-export { updateDocumentDirection }
+
+// Helper function to get current language
+export function getCurrentLanguage(): string | undefined {
+  if (typeof window === 'undefined') return undefined
+  return i18n.language
+}
