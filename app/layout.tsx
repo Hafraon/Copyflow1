@@ -1,16 +1,27 @@
-@@ .. @@
- import { StrictMode } from 'react';
- import { createRoot } from 'react-dom/client';
- import App from './App.tsx';
- import './index.css';
-+import './i18n';
-import { initErrorTracking } from './lib/error-handling';
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
+import App from './App'
 
- createRoot(document.getElementById('root')!).render(
-   <StrictMode>
-     <App />
-   </StrictMode>
- );
+const inter = Inter({ subsets: ['latin'] })
 
-// Initialize error tracking
-initErrorTracking();
+export const metadata: Metadata = {
+  title: 'CopyFlow - AI Product Content Generator',
+  description: 'Generate viral product content for any platform',
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>
+        <App>
+          {children}
+        </App>
+      </body>
+    </html>
+  )
+}

@@ -3,131 +3,87 @@ import { initReactI18next } from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 
 // Import translation files
-import enCommon from '../locales/en/common.json'
-import ukCommon from '../locales/uk/common.json'
+import enCommon from '@/locales/en/common.json'
+import ukCommon from '@/locales/uk/common.json'
 
-// Language resources
+// Safe DOM manipulation only on client side
+const updateDocumentDirection = (language: string) => {
+  if (typeof window === 'undefined') return
+  
+  const isRTL = ['ar'].includes(language)
+  const direction = isRTL ? 'rtl' : 'ltr'
+  
+  document.documentElement.dir = direction
+  document.documentElement.lang = language
+  
+  // Update body classes safely
+  document.body.classList.remove('rtl', 'ltr')
+  document.body.classList.add(direction)
+}
+
 const resources = {
   en: {
-    common: enCommon
+    common: enCommon,
   },
   uk: {
-    common: ukCommon
-  }
+    common: ukCommon,
+  },
+  de: {
+    common: enCommon, // Fallback to English for now
+  },
+  es: {
+    common: enCommon, // Fallback to English for now
+  },
+  fr: {
+    common: enCommon, // Fallback to English for now
+  },
+  it: {
+    common: enCommon, // Fallback to English for now
+  },
+  pl: {
+    common: enCommon, // Fallback to English for now
+  },
+  pt: {
+    common: enCommon, // Fallback to English for now
+  },
+  zh: {
+    common: enCommon, // Fallback to English for now
+  },
+  ja: {
+    common: enCommon, // Fallback to English for now
+  },
+  ar: {
+    common: enCommon, // Fallback to English for now
+  },
 }
 
-// Supported languages with metadata
-export const SUPPORTED_LANGUAGES = [
-  { code: 'en', name: 'English', flag: '🇺🇸', nativeName: 'English' },
-  { code: 'uk', name: 'Українська', flag: '🇺🇦', nativeName: 'Українська' },
-  { code: 'de', name: 'Deutsch', flag: '🇩🇪', nativeName: 'Deutsch' },
-  { code: 'es', name: 'Español', flag: '🇪🇸', nativeName: 'Español' },
-  { code: 'fr', name: 'Français', flag: '🇫🇷', nativeName: 'Français' },
-  { code: 'it', name: 'Italiano', flag: '🇮🇹', nativeName: 'Italiano' },
-  { code: 'pl', name: 'Polski', flag: '🇵🇱', nativeName: 'Polski' },
-  { code: 'pt', name: 'Português', flag: '🇵🇹', nativeName: 'Português' },
-  { code: 'zh', name: '中文', flag: '🇨🇳', nativeName: '中文' },
-  { code: 'ja', name: '日本語', flag: '🇯🇵', nativeName: '日本語' },
-  { code: 'ar', name: 'العربية', flag: '🇸🇦', nativeName: 'العربية' }
-] as const
+// Initialize i18n only on client side
+if (typeof window !== 'undefined') {
+  i18n
+    .use(LanguageDetector)
+    .use(initReactI18next)
+    .init({
+      resources,
+      lng: 'en',
+      fallbackLng: 'en',
+      debug: process.env.NODE_ENV === 'development',
+      
+      interpolation: {
+        escapeValue: false,
+      },
+      
+      detection: {
+        order: ['localStorage', 'navigator'],
+        caches: ['localStorage'],
+      },
+    })
 
-// RTL languages
-export const RTL_LANGUAGES = ['ar']
-
-// Language detection options
-const detectionOptions = {
-  // Detection order
-  order: ['localStorage', 'navigator', 'htmlTag', 'path', 'subdomain'],
+  // Update document direction when language changes
+  i18n.on('languageChanged', updateDocumentDirection)
   
-  // Cache user language
-  caches: ['localStorage'],
-  
-  // Exclude certain detection methods
-  excludeCacheFor: ['cimode'],
-  
-  // Check for supported languages only
-  checkWhitelist: true
+  // Set initial direction
+  updateDocumentDirection(i18n.language)
 }
-
-// Initialize i18next
-i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    resources,
-    
-    // Fallback language
-    fallbackLng: 'en',
-    
-    // Supported languages
-    supportedLngs: SUPPORTED_LANGUAGES.map(lang => lang.code),
-    
-    // Language detection
-    detection: detectionOptions,
-    
-    // Namespace configuration
-    defaultNS: 'common',
-    ns: ['common'],
-    
-    // Interpolation options
-    interpolation: {
-      escapeValue: false // React already escapes
-    },
-    
-    // React options
-    react: {
-      useSuspense: false // Disable suspense for SSR compatibility
-    },
-    
-    // Debug mode (only in development)
-    debug: process.env.NODE_ENV === 'development',
-    
-    // Key separator
-    keySeparator: '.',
-    
-    // Nested separator
-    nsSeparator: ':',
-    
-    // Return objects for nested keys
-    returnObjects: true,
-    
-    // Return empty string for missing keys in production
-    returnEmptyString: process.env.NODE_ENV === 'production',
-    
-    // Pluralization
-    pluralSeparator: '_',
-    
-    // Context separator
-    contextSeparator: '_',
-    
-    // Load path for additional languages (future)
-    backend: {
-      loadPath: '/locales/{{lng}}/{{ns}}.json'
-    }
-  })
-
-// Language change handler with RTL support
-i18n.on('languageChanged', (lng) => {
-  // Set document direction for RTL languages
-  const isRTL = RTL_LANGUAGES.includes(lng)
-  document.documentElement.dir = isRTL ? 'rtl' : 'ltr'
-  document.documentElement.lang = lng
-  
-  // Add RTL class to body for CSS styling
-  if (isRTL) {
-    document.body.classList.add('rtl')
-  } else {
-    document.body.classList.remove('rtl')
-  }
-  
-  // Store language preference
-  localStorage.setItem('copyflow-language', lng)
-})
-
-// Helper functions
-export const getCurrentLanguage = () => i18n.language
-export const isRTL = () => RTL_LANGUAGES.includes(i18n.language)
-export const getSupportedLanguage = (code: string) => 
-  SUPPORTED_LANGUAGES.find(lang => lang.code === code)
 
 export default i18n
+export { updateDocumentDirection }
